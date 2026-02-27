@@ -35,7 +35,7 @@ const DOBGen = (() => {
     if (minAge < 1 || maxAge < 1) {
       throw new RangeError('DOBGen: age values must be positive.');
     }
-    if (minAge >= maxAge) {
+    if (minAge > maxAge) {
       throw new RangeError('DOBGen: minAge must be less than maxAge.');
     }
 
