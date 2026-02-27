@@ -399,12 +399,12 @@ const UsernameGen = (() => {
    * @param {string}  opts.casing  - Case transform ID (key of CASE_TRANSFORMS).
    * @returns {string} Generated username.
    */
-  function generate({ pattern, casing }) {
+  function generate({ pattern, casing, name }) {
     const patternFn = PATTERNS[pattern] ?? PATTERNS['first_digits'];
     const caseFn    = CASE_TRANSFORMS[casing] ?? CASE_TRANSFORMS['lower'];
 
-    const { first, last } = NameGen.generate();
-    const raw = patternFn(first.toLowerCase(), last.toLowerCase());
+    const actualName = name ?? NameGen.generate();
+    const raw = patternFn(actualName.first.toLowerCase(), actualName.last.toLowerCase());
     return caseFn(raw);
   }
 
@@ -415,14 +415,15 @@ const UsernameGen = (() => {
    * @param {Object} opts - Same options as generate().
    * @returns {string[]}
    */
-  function generateMany(count, opts) {
+  function generateMany(count, opts, names = []) {
     const results = [];
     const seen = new Set();
     let attempts = 0;
     const maxAttempts = count * 100;
 
     while (results.length < count && attempts < maxAttempts) {
-      const username = generate(opts);
+      const name = names[results.length] ?? null;
+      const username = generate({ ...opts, name });
       if (!seen.has(username)) {
         seen.add(username);
         results.push(username);
@@ -752,8 +753,19 @@ const UI = (() => {
 
   /** Runs all three generators simultaneously. */
   function handleGenerateAll() {
-    handleGenerateNames();
-    handleGenerateUsernames();
+    // 1. Generate full names first
+    const nNames = parseInt(nameCountSlider.value, 10);
+    const names = NameGen.generateMany(nNames);
+    renderResults(resultsNames, names.map(n => n.full));
+
+    // 2. Generate usernames using the same names (as far as counts allow)
+    const nUsernames = parseInt(usernameCountSlider.value, 10);
+    const uPattern = usernamePatternSelect.value;
+    const uCasing  = usernameCaseSelect.value;
+    const usernames = UsernameGen.generateMany(nUsernames, { pattern: uPattern, casing: uCasing }, names);
+    renderResults(resultsUsername, usernames);
+
+    // 3. Generate DOB separately
     handleGenerateDOB();
   }
 
