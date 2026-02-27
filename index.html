@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Cryptographically secure identity generator for maintaining anonymity across online services." />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self';" />
+  <title>SecureIdent — Identity Generator</title>
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-mark" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 2L3 7.5V14C3 19.5 8 24.5 14 26C20 24.5 25 19.5 25 14V7.5L14 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M10 14l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="logo-text">SecureIdent</span>
+      </div>
+      <div class="header-meta">
+        <span class="status-badge">
+          <span class="status-dot" aria-hidden="true"></span>
+          CSPRNG Active
+        </span>
+        <span class="version-tag">v1.0.0</span>
+      </div>
+    </div>
+    <p class="header-tagline">Cryptographically secure identity generation. No logging. No telemetry. Purely local.</p>
+  </header>
+
+  <main class="main-content">
+
+    <!-- Loading / Error State -->
+    <div id="app-status" class="app-status" role="status" aria-live="polite">
+      <div class="status-inner">
+        <span class="spinner" aria-hidden="true"></span>
+        <span id="status-message">Loading name datasets&hellip;</span>
+      </div>
+    </div>
+
+    <!-- Generator Grid -->
+    <div class="generator-grid" id="generator-grid" aria-hidden="true">
+
+      <!-- ── CARD 1: Full Name Generator ── -->
+      <section class="gen-card" id="card-names" aria-labelledby="names-title">
+        <div class="card-header">
+          <div class="card-label">01</div>
+          <h2 class="card-title" id="names-title">Full Name</h2>
+          <p class="card-desc">Weighted selection from a global names dataset.</p>
+        </div>
+
+        <div class="card-controls">
+          <div class="control-row">
+            <label class="control-label" for="name-count">
+              Count
+              <span class="control-value" id="name-count-display">2</span>
+            </label>
+            <input
+              type="range"
+              id="name-count"
+              class="slider"
+              min="1" max="10" value="2"
+              aria-valuemin="1" aria-valuemax="10" aria-valuenow="2"
+            />
+          </div>
+        </div>
+
+        <button class="gen-btn" id="btn-names" type="button">
+          <span class="btn-icon" aria-hidden="true">⟳</span>
+          Generate Names
+        </button>
+
+        <div class="results-area" id="results-names" role="list" aria-label="Generated names" aria-live="polite"></div>
+      </section>
+
+      <!-- ── CARD 2: Username Generator ── -->
+      <section class="gen-card" id="card-username" aria-labelledby="username-title">
+        <div class="card-header">
+          <div class="card-label">02</div>
+          <h2 class="card-title" id="username-title">Username</h2>
+          <p class="card-desc">Natural-pattern usernames with cryptographic randomness.</p>
+        </div>
+
+        <div class="card-controls">
+          <div class="control-row">
+            <label class="control-label" for="username-count">
+              Count
+              <span class="control-value" id="username-count-display">2</span>
+            </label>
+            <input
+              type="range"
+              id="username-count"
+              class="slider"
+              min="1" max="10" value="2"
+              aria-valuemin="1" aria-valuemax="10" aria-valuenow="2"
+            />
+          </div>
+
+          <div class="control-row">
+            <label class="control-label" for="username-pattern">Pattern</label>
+            <select id="username-pattern" class="select-input">
+              <option value="first.last">firstname.lastname</option>
+              <option value="first_digits" selected>firstname_NNNN</option>
+              <option value="initial_last">f.lastname</option>
+              <option value="initial_last_digits">f.lastNNN</option>
+              <option value="firstlast_digits">firstlastNN</option>
+              <option value="last_digits">lastnameNNN</option>
+            </select>
+          </div>
+
+          <div class="control-row">
+            <label class="control-label" for="username-case">Case</label>
+            <select id="username-case" class="select-input">
+              <option value="lower" selected>lowercase</option>
+              <option value="upper">UPPERCASE</option>
+              <option value="camel">camelCase</option>
+              <option value="pascal">PascalCase</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="gen-btn" id="btn-username" type="button">
+          <span class="btn-icon" aria-hidden="true">⟳</span>
+          Generate Usernames
+        </button>
+
+        <div class="results-area" id="results-username" role="list" aria-label="Generated usernames" aria-live="polite"></div>
+      </section>
+
+      <!-- ── CARD 3: Date of Birth Generator ── -->
+      <section class="gen-card" id="card-dob" aria-labelledby="dob-title">
+        <div class="card-header">
+          <div class="card-label">03</div>
+          <h2 class="card-title" id="dob-title">Date of Birth</h2>
+          <p class="card-desc">Statistically plausible birthdates within a configurable age range.</p>
+        </div>
+
+        <div class="card-controls">
+          <div class="control-row">
+            <label class="control-label" for="dob-count">
+              Count
+              <span class="control-value" id="dob-count-display">2</span>
+            </label>
+            <input
+              type="range"
+              id="dob-count"
+              class="slider"
+              min="1" max="10" value="2"
+              aria-valuemin="1" aria-valuemax="10" aria-valuenow="2"
+            />
+          </div>
+
+          <div class="control-row age-range-row">
+            <span class="control-label">Age Range</span>
+            <div class="age-inputs">
+              <div class="age-field">
+                <label for="min-age" class="age-label">Min</label>
+                <input type="number" id="min-age" class="num-input" value="18" min="1" max="99" />
+              </div>
+              <span class="age-separator">—</span>
+              <div class="age-field">
+                <label for="max-age" class="age-label">Max</label>
+                <input type="number" id="max-age" class="num-input" value="65" min="1" max="99" />
+              </div>
+            </div>
+          </div>
+
+          <div class="control-row">
+            <label class="control-label" for="dob-format">Format</label>
+            <select id="dob-format" class="select-input">
+              <option value="iso" selected>YYYY-MM-DD (ISO 8601)</option>
+              <option value="us">MM/DD/YYYY (US)</option>
+              <option value="eu">DD/MM/YYYY (EU)</option>
+              <option value="long">Month DD, YYYY</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="gen-btn" id="btn-dob" type="button">
+          <span class="btn-icon" aria-hidden="true">⟳</span>
+          Generate Dates
+        </button>
+
+        <div class="results-area" id="results-dob" role="list" aria-label="Generated dates of birth" aria-live="polite"></div>
+      </section>
+
+    </div><!-- /generator-grid -->
+
+    <!-- Generate All Strip -->
+    <div class="generate-all-strip" id="generate-all-strip">
+      <button class="gen-all-btn" id="btn-all" type="button">
+        <span class="btn-icon" aria-hidden="true">◈</span>
+        Generate All
+      </button>
+      <p class="gen-all-note">Generates names, usernames, and birthdates simultaneously using current settings.</p>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-item">All operations are local. Zero network requests after dataset load.</span>
+      <span class="footer-sep" aria-hidden="true">·</span>
+      <span class="footer-item">Randomness source: <code>crypto.getRandomValues()</code></span>
+      <span class="footer-sep" aria-hidden="true">·</span>
+      <span class="footer-item">~160k first names · ~100k last names</span>
+    </div>
+  </footer>
+
+  <div id="copy-toast" class="copy-toast" aria-live="assertive" aria-atomic="true" role="alert"></div>
+
+  <script src="index.js" defer></script>
+</body>
+</html>
