@@ -12,8 +12,6 @@
  * Data files expected (one name per line, UTF-8):
  *   ./data/first-names.txt
  *   ./data/last-names.txt
- *
- * @version 1.0.0
  */
 
 'use strict';
