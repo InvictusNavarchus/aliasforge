@@ -57,6 +57,9 @@ function generate(opts: UsernameOptions): string {
 }
 
 function generateMany(count: number, opts: UsernameOptions, names: FullName[] = []): string[] {
+  if (!Number.isInteger(count) || count <= 0) {
+    throw new RangeError(`UsernameGen.generateMany: count must be a positive integer, got ${count}`);
+  }
   const results: string[] = [];
   const seen = new Set<string>();
   let attempts = 0;

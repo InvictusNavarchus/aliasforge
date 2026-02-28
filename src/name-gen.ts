@@ -34,6 +34,12 @@ function generateMany(count: number): FullName[] {
     attempts++;
   }
 
+  if (results.length !== count) {
+    throw new Error(
+      `NameGen.generateMany: could only generate ${results.length} unique names out of ${count} requested after ${maxAttempts} attempts.`
+    );
+  }
+
   return results;
 }
 

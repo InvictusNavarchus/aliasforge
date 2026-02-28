@@ -1,5 +1,8 @@
 import { Clipboard } from './clipboard.ts';
 
+// Track pending rAF handles per container to cancel stale renders
+const pendingFrames = new WeakMap<HTMLElement, number>();
+
 function createResultItem(value: string): HTMLElement {
   const item = document.createElement('div');
   item.className = 'result-item';
@@ -22,12 +25,22 @@ function createResultItem(value: string): HTMLElement {
 }
 
 function render(container: HTMLElement, values: string[]): void {
+  // Cancel any previously scheduled frame for this container
+  const existing = pendingFrames.get(container);
+  if (existing !== undefined) {
+    cancelAnimationFrame(existing);
+  }
+
   container.innerHTML = '';
-  requestAnimationFrame(() => {
+
+  const handle = requestAnimationFrame(() => {
+    pendingFrames.delete(container);
     const fragment = document.createDocumentFragment();
     values.forEach(v => fragment.appendChild(createResultItem(v)));
     container.appendChild(fragment);
   });
+
+  pendingFrames.set(container, handle);
 }
 
 export const Renderer = { render } as const;

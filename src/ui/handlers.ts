@@ -23,7 +23,8 @@ function readAgeRange(): { minAge: number; maxAge: number } {
   let maxAge = parseInt(maxAgeInput.value, 10);
 
   if (isNaN(minAge) || minAge < 1)  minAge = 1;
-  if (isNaN(maxAge) || maxAge > 99) maxAge = 99;
+  if (isNaN(maxAge) || maxAge < 1)  maxAge = 1;
+  if (maxAge > 99)                  maxAge = 99;
   if (minAge >= maxAge)             minAge = Math.max(1, maxAge - 1);
 
   minAgeInput.value = String(minAge);

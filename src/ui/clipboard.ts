@@ -10,26 +10,31 @@ function showToast(msg: string): void {
 }
 
 async function copy(text: string, btn: HTMLButtonElement): Promise<void> {
+  let success = false;
+
   try {
     await navigator.clipboard.writeText(text);
+    success = true;
   } catch {
     const ta = document.createElement('textarea');
     ta.value = text;
     ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none;';
     document.body.appendChild(ta);
     ta.select();
-    document.execCommand('copy');
+    success = document.execCommand('copy');
     document.body.removeChild(ta);
   }
 
-  btn.textContent = 'Copied';
-  btn.classList.add('copied');
-  showToast(`Copied: ${text}`);
+  if (success) {
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    showToast(`Copied: ${text}`);
 
-  setTimeout(() => {
-    btn.textContent = 'Copy';
-    btn.classList.remove('copied');
-  }, 1500);
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 1500);
+  }
 }
 
 export const Clipboard = { copy, showToast } as const;

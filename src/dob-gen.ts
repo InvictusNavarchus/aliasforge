@@ -13,6 +13,8 @@ const MONTH_NAMES: readonly string[] = [
   'July',    'August',   'September', 'October', 'November', 'December',
 ];
 
+const MS_PER_DAY = 86_400_000;
+
 function generateDate(opts: Pick<DOBOptions, 'minAge' | 'maxAge'>): Date {
   if (opts.minAge < 1 || opts.maxAge < 1) {
     throw new RangeError('DOBGen: age values must be positive.');
@@ -24,14 +26,23 @@ function generateDate(opts: Pick<DOBOptions, 'minAge' | 'maxAge'>): Date {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const ageYears   = RNG.randomRange(opts.minAge, opts.maxAge);
-  const birthYear  = today.getFullYear() - ageYears;
-  const birthMonth = RNG.randomInt(12);
+  // Compute the valid date range:
+  //   earliest DOB = today minus maxAge years (oldest person)
+  //   latest DOB   = today minus minAge years (youngest person)
+  const earliest = new Date(today);
+  earliest.setFullYear(earliest.getFullYear() - opts.maxAge);
 
-  const daysInMonth = new Date(birthYear, birthMonth + 1, 0).getDate();
-  const birthDay    = 1 + RNG.randomInt(daysInMonth);
+  const latest = new Date(today);
+  latest.setFullYear(latest.getFullYear() - opts.minAge);
 
-  const dob = new Date(birthYear, birthMonth, birthDay);
+  // Work in whole days to stay within 32-bit integer range.
+  // Max range is ~100 years = ~36525 days, well within 2^32.
+  const earliestDay = Math.floor(earliest.getTime() / MS_PER_DAY);
+  const latestDay   = Math.floor(latest.getTime()   / MS_PER_DAY);
+  const rangeDays   = latestDay - earliestDay;
+
+  const offsetDays = rangeDays > 0 ? RNG.randomInt(rangeDays + 1) : 0;
+  const dob = new Date((earliestDay + offsetDays) * MS_PER_DAY);
   dob.setHours(0, 0, 0, 0);
   return dob;
 }
@@ -52,6 +63,9 @@ function formatDate(date: Date, fmt: DOBFormat): string {
 }
 
 function generateMany(count: number, opts: DOBOptions): string[] {
+  if (!Number.isInteger(count) || count <= 0) {
+    throw new RangeError(`DOBGen.generateMany: count must be a positive integer, got ${count}`);
+  }
   return Array.from({ length: count }, () =>
     formatDate(generateDate(opts), opts.format)
   );

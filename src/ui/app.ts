@@ -42,22 +42,22 @@ function showApp(): void {
 }
 
 async function init(): Promise<void> {
-  bindSlider(nameCountSlider,     nameCountDisplay);
-  bindSlider(usernameCountSlider, usernameCountDisplay);
-  bindSlider(dobCountSlider,      dobCountDisplay);
-
-  btnNames.addEventListener('click',    Handlers.generateNames);
-  btnUsername.addEventListener('click', Handlers.generateUsernames);
-  btnDob.addEventListener('click',      Handlers.generateDOB);
-  btnAll.addEventListener('click',      Handlers.generateAll);
-
-  [minAgeInput, maxAgeInput].forEach(input => {
-    input.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Enter') Handlers.generateDOB();
-    });
-  });
-
   try {
+    bindSlider(nameCountSlider,     nameCountDisplay);
+    bindSlider(usernameCountSlider, usernameCountDisplay);
+    bindSlider(dobCountSlider,      dobCountDisplay);
+
+    btnNames.addEventListener('click',    Handlers.generateNames);
+    btnUsername.addEventListener('click', Handlers.generateUsernames);
+    btnDob.addEventListener('click',      Handlers.generateDOB);
+    btnAll.addEventListener('click',      Handlers.generateAll);
+
+    [minAgeInput, maxAgeInput].forEach(input => {
+      input.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Enter') Handlers.generateDOB();
+      });
+    });
+
     setStatus('Loading name datasets\u2026');
     await DataStore.init();
 
@@ -68,9 +68,9 @@ async function init(): Promise<void> {
     Handlers.generateAll();
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.error('[AliasForge] DataStore.init failed:', err);
+    console.error('[AliasForge] init failed:', err);
     setStatus(
-      `Failed to load datasets: ${message}. ` +
+      `Initialisation failed: ${message}. ` +
       'Ensure ./data/first-names.txt and ./data/last-names.txt are present.',
       true
     );
