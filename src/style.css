@@ -844,8 +844,14 @@ body {
   font-family: var(--font-mono);
 }
 
+.footer-hl {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
 .footer-inner a {
-  color: inherit;
+  color: var(--text-primary);
+  font-weight: 500;
   text-decoration: underline;
   text-decoration-color: var(--border-bright);
   text-underline-offset: 2px;
@@ -854,7 +860,7 @@ body {
 
 .footer-inner a:hover,
 .footer-inner a:focus-visible {
-  color: var(--text-primary);
+  color: var(--accent);
   text-decoration-color: var(--accent);
 }
 
