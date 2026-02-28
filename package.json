@@ -6,7 +6,9 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"format": "biome check --write",
+		"lint": "biome check"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.4",
