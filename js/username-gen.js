@@ -114,11 +114,14 @@ const UsernameGen = (() => {
     const results     = [];
     const seen        = new Set();
     let   attempts    = 0;
+    let   namesIndex  = 0;
     const maxAttempts = count * 100;
 
     while (results.length < count && attempts < maxAttempts) {
-      const name     = names[results.length] ?? null;
+      const name     = namesIndex < names.length ? names[namesIndex] : null;
       const username = generate({ ...opts, name });
+      namesIndex++;  // Always advance to avoid reusing the same name on duplicate
+      
       if (!seen.has(username)) {
         seen.add(username);
         results.push(username);
