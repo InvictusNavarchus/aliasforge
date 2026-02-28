@@ -6,12 +6,8 @@ const statusMessage    = document.getElementById('status-message') as HTMLElemen
 const generatorGrid    = document.getElementById('generator-grid') as HTMLElement;
 const generateAllStrip = document.getElementById('generate-all-strip') as HTMLElement;
 
-const nameCountSlider      = document.getElementById('name-count') as HTMLInputElement;
-const nameCountDisplay     = document.getElementById('name-count-display') as HTMLElement;
-const usernameCountSlider  = document.getElementById('username-count') as HTMLInputElement;
-const usernameCountDisplay = document.getElementById('username-count-display') as HTMLElement;
-const dobCountSlider       = document.getElementById('dob-count') as HTMLInputElement;
-const dobCountDisplay      = document.getElementById('dob-count-display') as HTMLElement;
+const globalCountSlider  = document.getElementById('global-count') as HTMLInputElement;
+const globalCountDisplay = document.getElementById('global-count-display') as HTMLElement;
 
 const btnNames    = document.getElementById('btn-names') as HTMLButtonElement;
 const btnUsername = document.getElementById('btn-username') as HTMLButtonElement;
@@ -30,6 +26,19 @@ function bindSlider(slider: HTMLInputElement, display: HTMLElement): void {
   sync();
 }
 
+function bindSettingsToggle(toggleId: string, panelId: string): void {
+  const toggle = document.getElementById(toggleId) as HTMLButtonElement | null;
+  const panel  = document.getElementById(panelId) as HTMLElement | null;
+  if (!toggle || !panel) return;
+
+  toggle.addEventListener('click', () => {
+    const isOpen = !panel.hidden;
+    panel.hidden = isOpen;
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+    toggle.classList.toggle('is-active', !isOpen);
+  });
+}
+
 function setStatus(msg: string, isError = false): void {
   statusMessage.textContent = msg;
   appStatus.classList.toggle('is-error', isError);
@@ -43,14 +52,15 @@ function showApp(): void {
 
 async function init(): Promise<void> {
   try {
-    bindSlider(nameCountSlider,     nameCountDisplay);
-    bindSlider(usernameCountSlider, usernameCountDisplay);
-    bindSlider(dobCountSlider,      dobCountDisplay);
+    bindSlider(globalCountSlider, globalCountDisplay);
 
     btnNames.addEventListener('click',    Handlers.generateNames);
     btnUsername.addEventListener('click', Handlers.generateUsernames);
     btnDob.addEventListener('click',      Handlers.generateDOB);
     btnAll.addEventListener('click',      Handlers.generateAll);
+
+    bindSettingsToggle('toggle-username-settings', 'username-settings');
+    bindSettingsToggle('toggle-dob-settings',      'dob-settings');
 
     [minAgeInput, maxAgeInput].forEach(input => {
       input.addEventListener('keydown', (e: KeyboardEvent) => {
