@@ -6,7 +6,6 @@
   <meta name="description" content="Cryptographically secure identity generator for maintaining anonymity across online services." />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self';" />
   <title>AliasForge — Identity Generator</title>
-  <link rel="stylesheet" href="index.css" />
 </head>
 <body>
 
@@ -215,16 +214,6 @@
 
   <div id="copy-toast" class="copy-toast" aria-live="assertive" aria-atomic="true" role="alert"></div>
 
-  <!-- Load order follows the dependency graph (no bundler required) -->
-  <script src="js/rng.js" defer></script>
-  <script src="js/data-store.js" defer></script>
-  <script src="js/name-gen.js" defer></script>
-  <script src="js/username-gen.js" defer></script>
-  <script src="js/dob-gen.js" defer></script>
-  <script src="js/ui/clipboard.js" defer></script>
-  <script src="js/ui/renderer.js" defer></script>
-  <script src="js/ui/handlers.js" defer></script>
-  <script src="js/ui/app.js" defer></script>
-  <script src="index.js" defer></script>
+  <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
