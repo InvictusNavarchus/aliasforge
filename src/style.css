@@ -1,5 +1,5 @@
 /* ============================================================
-   SecureIdent — index.css
+   AliasForge — style.css
    Theme: Dark Security Terminal · Industrial Precision
    ============================================================ */
 
@@ -48,7 +48,7 @@
   font-family: 'Geist';
   src: url('./assets/fonts/Geist[wght].woff2') format('woff2');
   font-weight: 100 900;
-  font-display: swap; /* Prevents invisible text while the font is loading */
+  font-display: swap;
   font-style: normal;
 }
 
@@ -248,6 +248,120 @@ body {
   to { transform: rotate(360deg); }
 }
 
+/* ── Generate All Strip ─────────────────────────────────── */
+.generate-all-strip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.generate-all-strip::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.6;
+}
+
+/* Main row: big button + count control side by side */
+.gen-all-main {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.gen-all-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.9rem 2.5rem;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  color: #040a0d;
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: box-shadow var(--transition), transform var(--transition), opacity var(--transition);
+  outline: none;
+}
+
+.gen-all-btn:hover {
+  box-shadow: 0 0 20px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.gen-all-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.gen-all-btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.gen-all-btn .btn-icon {
+  font-size: 1.2rem;
+}
+
+/* Global count control — sits inline next to the button */
+.global-count-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 160px;
+  flex: 1;
+  max-width: 280px;
+}
+
+.global-count-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  cursor: default;
+}
+
+.global-count-text {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.global-count-value {
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 700;
+  min-width: 1.5ch;
+  text-align: right;
+}
+
+.global-slider {
+  /* inherits .slider styles */
+}
+
+.gen-all-note {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
 /* ── Generator Grid ─────────────────────────────────────── */
 .generator-grid {
   display: grid;
@@ -268,7 +382,7 @@ body {
   padding: 1.75rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
   position: relative;
   overflow: hidden;
   transition: border-color var(--transition), box-shadow var(--transition);
@@ -317,13 +431,135 @@ body {
   margin-top: 0.15rem;
 }
 
-/* ── Controls ───────────────────────────────────────────── */
-.card-controls {
+/* ── Card Footer (regen + settings toggle) ──────────────── */
+.card-footer {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
 }
 
+/* ── Regen Button (secondary) ───────────────────────────── */
+.regen-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  background: transparent;
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+  outline: none;
+  user-select: none;
+  flex: 1;
+  justify-content: center;
+}
+
+.regen-btn:hover {
+  color: var(--accent);
+  border-color: rgba(13, 255, 140, 0.4);
+  background: var(--accent-dim);
+}
+
+.regen-btn:active {
+  transform: translateY(1px);
+}
+
+.regen-btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.regen-btn .btn-icon {
+  font-size: 0.9rem;
+  line-height: 1;
+  transition: transform 0.35s ease;
+}
+
+.regen-btn:hover .btn-icon {
+  transform: rotate(180deg);
+}
+
+/* ── Settings Toggle ────────────────────────────────────── */
+.settings-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.75rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+  outline: none;
+  user-select: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.settings-toggle:hover {
+  color: var(--text-secondary);
+  border-color: var(--border-bright);
+  background: var(--bg-hover);
+}
+
+.settings-toggle.is-active {
+  color: var(--accent);
+  border-color: rgba(13, 255, 140, 0.3);
+  background: var(--accent-dim);
+}
+
+.settings-toggle:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.settings-icon {
+  font-size: 0.8rem;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.settings-toggle.is-active .settings-icon {
+  transform: rotate(45deg);
+}
+
+/* ── Card Settings Panel ────────────────────────────────── */
+.card-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  animation: settings-open 0.18s ease both;
+}
+
+.card-settings[hidden] {
+  display: none;
+}
+
+@keyframes settings-open {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Controls ───────────────────────────────────────────── */
 .control-row {
   display: flex;
   flex-direction: column;
@@ -392,6 +628,17 @@ body {
 .slider::-webkit-slider-runnable-track {
   background: linear-gradient(90deg, var(--accent-dim), var(--border));
   border-radius: 2px;
+}
+
+/* Global slider — slightly taller thumb for prominence */
+.global-slider::-webkit-slider-thumb {
+  width: 16px;
+  height: 16px;
+}
+
+.global-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
 }
 
 /* ── Select ─────────────────────────────────────────────── */
@@ -483,53 +730,6 @@ body {
   padding-top: 1.1rem;
 }
 
-/* ── Generate Button ────────────────────────────────────── */
-.gen-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.65rem 1rem;
-  background: var(--accent-dim);
-  border: 1px solid rgba(13, 255, 140, 0.25);
-  border-radius: var(--radius);
-  color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition), color var(--transition);
-  outline: none;
-  user-select: none;
-}
-
-.gen-btn:hover {
-  background: rgba(13, 255, 140, 0.18);
-  border-color: rgba(13, 255, 140, 0.5);
-  box-shadow: 0 0 16px rgba(13, 255, 140, 0.15);
-}
-
-.gen-btn:active {
-  transform: translateY(1px);
-  box-shadow: none;
-}
-
-.gen-btn:focus-visible {
-  box-shadow: 0 0 0 2px var(--accent-glow);
-}
-
-.gen-btn .btn-icon {
-  font-size: 0.95rem;
-  line-height: 1;
-  transition: transform 0.35s ease;
-}
-
-.gen-btn:hover .btn-icon {
-  transform: rotate(180deg);
-}
-
 /* ── Results Area ───────────────────────────────────────── */
 .results-area {
   display: flex;
@@ -604,78 +804,6 @@ body {
 .copy-btn.copied {
   color: var(--accent);
   border-color: rgba(13, 255, 140, 0.3);
-}
-
-/* ── Generate All Strip ─────────────────────────────────── */
-.generate-all-strip {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 1.2rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 2.5rem 2rem;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
-}
-
-.generate-all-strip::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  opacity: 0.6;
-}
-
-.gen-all-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 0.9rem 2.5rem;
-  background: var(--accent);
-  border: none;
-  border-radius: var(--radius);
-  color: #040a0d;
-  font-family: var(--font-mono);
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: box-shadow var(--transition), transform var(--transition), opacity var(--transition);
-  outline: none;
-}
-
-.gen-all-btn:hover {
-  box-shadow: 0 0 20px var(--accent-glow);
-  transform: translateY(-1px);
-}
-
-.gen-all-btn:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-.gen-all-btn:focus-visible {
-  box-shadow: 0 0 0 3px var(--accent-glow);
-}
-
-.gen-all-btn .btn-icon {
-  font-size: 1.2rem;
-}
-
-.gen-all-note {
-  font-size: 0.82rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  max-width: 600px;
 }
 
 /* ── Footer ─────────────────────────────────────────────── */
@@ -763,11 +891,21 @@ body {
   }
 
   .generate-all-strip {
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .gen-all-main {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.25rem;
   }
 
   .gen-all-btn {
     width: 100%;
+  }
+
+  .global-count-control {
+    max-width: 100%;
   }
 
   .version-tag {
