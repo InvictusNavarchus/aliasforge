@@ -1,4 +1,4 @@
-import { NameGen } from '../name-gen.ts';
+import { NameGen, type FullName } from '../name-gen.ts';
 import { UsernameGen, type UsernamePattern, type UsernameCasing } from '../username-gen.ts';
 import { DOBGen, type DOBFormat } from '../dob-gen.ts';
 import { Renderer } from './renderer.ts';
@@ -7,6 +7,7 @@ const globalCountSlider = document.getElementById('global-count') as HTMLInputEl
 
 const usernamePatternSelect = document.getElementById('username-pattern') as HTMLSelectElement;
 const usernameCaseSelect    = document.getElementById('username-case') as HTMLSelectElement;
+const usernameMatchSelect   = document.getElementById('username-match') as HTMLSelectElement;
 
 const minAgeInput     = document.getElementById('min-age') as HTMLInputElement;
 const maxAgeInput     = document.getElementById('max-age') as HTMLInputElement;
@@ -45,7 +46,20 @@ function generateUsernames(): void {
   const count   = getCount();
   const pattern = usernamePatternSelect.value as UsernamePattern;
   const casing  = usernameCaseSelect.value as UsernameCasing;
-  const usernames = UsernameGen.generateMany(count, { pattern, casing });
+  const match   = usernameMatchSelect?.value === 'yes';
+
+  let names: FullName[] = [];
+  if (match) {
+    const renderedNames = Array.from(resultsNames.querySelectorAll('.result-value'));
+    names = renderedNames.map(el => {
+      const parts = (el.textContent || '').trim().split(' ');
+      const first = parts[0] || '';
+      const last = parts.slice(1).join(' ') || '';
+      return { first, last, full: `${first} ${last}` };
+    });
+  }
+
+  const usernames = UsernameGen.generateMany(count, { pattern, casing }, names);
   Renderer.render(resultsUsername, usernames);
 }
 
