@@ -1,0 +1,38 @@
+/*
+  # ──────────────────────────────────────────────
+  # Content Security Policy
+  # ──────────────────────────────────────────────
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;
+
+  # ──────────────────────────────────────────────
+  # Transport Security
+  # ──────────────────────────────────────────────
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+  # ──────────────────────────────────────────────
+  # Framing & Clickjacking
+  # ──────────────────────────────────────────────
+  X-Frame-Options: DENY
+
+  # ──────────────────────────────────────────────
+  # MIME Sniffing
+  # ──────────────────────────────────────────────
+  X-Content-Type-Options: nosniff
+
+  # ──────────────────────────────────────────────
+  # Referrer Policy
+  # ──────────────────────────────────────────────
+  Referrer-Policy: no-referrer
+
+  # ──────────────────────────────────────────────
+  # Permissions Policy (disable every browser feature)
+  # ──────────────────────────────────────────────
+  Permissions-Policy: accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()
+
+  # ──────────────────────────────────────────────
+  # Cross-Origin Policies (enables full isolation)
+  # ──────────────────────────────────────────────
+  ! Access-Control-Allow-Origin
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+  Cross-Origin-Resource-Policy: same-origin
